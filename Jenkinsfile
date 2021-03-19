@@ -12,7 +12,14 @@ pipeline {
         
         stage ('Checkout Git') {
             steps {
- 	            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/SonnyBurnett/helloworld.git']]]) 
+ 	            checkout([
+                            $class: 'GitSCM', 
+                            branches: [[name: '*/master']], 
+                            doGenerateSubmoduleConfigurations: false, 
+                            extensions: [], 
+                            submoduleCfg: [], 
+                            userRemoteConfigs: [[credentialsId: '', 
+                                 url: 'https://github.com/SonnyBurnett/helloworld.git']]]) 
 	        }
         }
         
