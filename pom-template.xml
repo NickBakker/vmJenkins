@@ -1,0 +1,205 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <!-- The Basics -->
+
+  <groupId>org.bakker.group</groupId>
+  <artifactId>HelloWorld</artifactId>
+  <version>3.6</version>
+  <packaging>war</packaging>
+
+
+  <!-- Maven downloads and links the dependencies on compilation -->
+  <!-- For example: junit, for unit testing -->
+
+  <dependencies>
+	<dependency>
+      		<groupId>junit</groupId>
+      		<artifactId>junit</artifactId>
+      		<version>4.12</version>
+      		<scope>test</scope>
+		<optional>true</optional>
+    	</dependency>
+  </dependencies>
+
+
+  <!-- Maven can inherit functionality from a parent -->
+  <!-- Leave this out if you do not have a parent -->
+
+  <parent>
+    <groupId>org.bakker.group</groupId>
+    <artifactId>my-parent</artifactId>
+    <version>2.0</version>
+    <relativePath>../my-parent</relativePath>
+  </parent>
+
+  <!-- Used by Maven to manage dependencies when using a Super POM and/or inheritence -->
+  <!-- Leave out if not used -->
+
+  <dependencyManagement>...</dependencyManagement>
+
+  <!-- You can define a pom that manages a group of other projects -->
+  <!-- For this you can use modules -->
+  <!-- Leave out if not used -->
+
+  <modules>
+    <module>my-project</module>
+    <module>another-project</module>
+    <module>third-project/pom-example.xml</module>
+  </modules>
+
+  <!-- properties can be seen as variables -->
+  <!-- you define them once, and they can be used everywhere in the POM -->
+  <!-- usually all versions of all components are mentioned here. -->
+  <!-- this makes it possible to reproduce the end-result at all times -->
+  
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.complier.source>
+    <maven.compiler.target>${java.version}</maven.complier.target>
+  </properties>
+ 
+  <!-- Build Settings -->
+  <!-- used to declare your project directory structure and managing your plugins -->
+  <build>
+     <defaultGoal>install</defaultGoal>
+     <finalName>petclinic</finalName>
+     <directory>$basedir}/target</directory>
+
+  <!-- Resources is used to bundle certain resources or files in your project -->
+  <!-- Often these are configuration files, that you want to package with your project -->
+  
+  <resources>
+     <resource>
+        <targetPath>META-INF/plexus</targetPath>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/plexus</directory>
+        <includes>
+          <include>configuration.xml</include>
+        </includes>
+     </resource>
+  </resources>
+
+  <!-- add extra functionality to Maven with Plugins -->
+  
+  <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+ 
+ 
+  <!-- More Project Information -->
+  <!-- if you are bored, and have nothing else to do -->
+
+
+  <!-- You can give your project a nice name, instead of (for example) mgd-6.7a -->
+
+  <name>Tiger</name>
+  <description>"The Tiger project builds nice software"</description>
+  <url>https://github.com/SonnyBurnett/helloworld</url>
+  <inceptionYear>2019</inceptionYear>
+
+
+<!-- information about your organization -->  
+
+  organization>
+    <name>Bakker Development</name>
+    <url>http://www.tsbakker.nl</url>
+  </organization>
+
+<!-- You can even register all developers -->
+
+  <developers>
+    <developer>
+      <id>jdoe</id>
+      <name>John Doe</name>
+      <email>jdoe@example.com</email>
+      <url>http://www.example.com/jdoe</url>
+      <organization>ACME</organization>
+      <organizationUrl>http://www.example.com</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+<!-- and all the contributors -->
+<!-- you must be desperate for work if you are going to do this -->
+
+  <contributors>
+    <contributor>
+      <name>Noelle</name>
+      <email>some.name@gmail.com</email>
+      <url>http://noellemarie.com</url>
+      <organization>Noelle Marie</organization>
+      <organizationUrl>http://noellemarie.com</organizationUrl>
+      <roles>
+        <role>tester</role>
+      </roles>
+    </contributor>
+  </contributors>
+ 
+  <!-- Environment Settings -->
+  <!-- There are many more, but I left them out. Too much nonsense -->
+
+  
+  <!-- repositories are collections of artifacts -->
+  <!-- Basically the result of the build -->
+  <!-- So can be a war file or a jar file -->
+  <!-- Maven can store artifacts, but also collect artifacts -->
+  <!-- You can use Nexus or Artifactory to store the artifacts -->
+  <!-- Specify it here -->
+
+   <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <name>Nexus Releases</name>
+      <id>releases-repo</id>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      <name>Nexus Snapshots</name>
+      <id>snapshots-repo</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
+  <!-- Distribute your artifacts -->
+  <!-- sort of deploy I guess -->
+  <!-- But can also be used to store your artifacts -->
+  <!-- As an alternative for repositories -->
+  
+  
+  <distributionManagement>
+    <repository>
+        <id>releases</id>
+        <name>artifactory.example.com-releases</name>
+        <url>http://192.168.33.10:8081/artifactory/releases_mvn_bakker</url>
+    </repository>
+    <snapshotRepository>
+        <id>snapshots</id>
+        <name>artifactory.example.com-snapshots</name>
+        <url>http://192.168.33.10:8081/artifactory/snapshots_mvn_bakker</url>
+    </snapshotRepository>
+</distributionManagement>
+
+  <!-- change settings depending on the environment where you are building (dev, test, acc, prod) -->
+  <!-- not explained further here -->
+ 
+  <profiles>...</profiles>
+</project>
