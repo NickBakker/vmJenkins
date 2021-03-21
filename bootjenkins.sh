@@ -76,8 +76,6 @@ echo "*                                                                    *"
 echo "**********************************************************************"
 echo
 
-wget http://192.168.33.60:8080/jnlpJars/jenkins-cli.jar
- 
 
 ifconfig
 
@@ -95,6 +93,15 @@ echo "*                                                                    *"
 echo "* JENKINS_HOME = /var/lib/jenkins                                    *"
 echo "* MAVEN_HOME = /opt/maven                                            *"
 echo "* JAVA_HOME = /usr/lib/jvm/java                                      *"
+echo "*                                                                    *"
+echo "* start Tomcat  = /opt/tomcat/bin/startup.sh                         *"
+echo "* start Nexus   = /opt/nexus/bin/nexus start                         *"
+echo "* start Jenkins = systemctl start jenkins                            *"
+echo "*                                                                    *"
+echo "* Tomcat  port: 8090                                                 *"
+echo "* Jenkins port: 8080                                                 *"
+echo "* Nexus   port: 8081                                                 *"
+echo "*                                                                    *"
 echo "**********************************************************************"
 echo
 

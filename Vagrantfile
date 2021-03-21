@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
 
    config.vm.define :jenkins do |jenkins|
       jenkins.vm.box = "roboxes/centos8"  
-	  jenkins.vm.network "private_network", ip: "192.168.33.60"
+	  jenkins.vm.network "private_network", type: "dhcp"
 	  jenkins.vm.provider "virtualbox" do |vb|
 	     vb.memory = 2048
 	     vb.name = "jenkins"
