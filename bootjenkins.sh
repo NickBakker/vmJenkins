@@ -16,6 +16,7 @@ echo "* install git                                                        *"
 echo "* install jenkins                                                    *"
 echo "* install java-1.8.0-openjdk-devel                                   *"  
 echo "* start the jenkins service                                          *"
+echo "* install tomcat9                                                    *"
 echo "*                                                                    *" 
 echo "**********************************************************************" 
 echo
@@ -39,6 +40,7 @@ rm nexus-3.30.0-01-unix.tar.gz
 ln -s /opt/nexus-3.30.0-01 /opt/nexus
 /opt/nexus/bin/nexus start
 
+groupadd tomcat
 wget https://mirror.novg.net/apache/tomcat/tomcat-9/v9.0.44/src/apache-tomcat-9.0.44-src.tar.gz
 tar zxf apache-tomcat-9.0.44-src.tar.gz --directory=/opt
 rm apache-tomcat-9.0.44-src.tar.gz
