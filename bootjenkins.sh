@@ -23,8 +23,11 @@ echo
 
 apt-get update
 
-#apt-get install -y default-jdk
-#JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+apt-get install -y apt-get install openjdk-8-jdk
+ln -s /usr/lib/jvm/
+JAVA_HOME=/usr/lib/jvm/java8
+EXPORT JAVA_HOME
+echo "export JAVA_HOME=/usr/lib/jvm/java8" >> /etc/bashrc
 
 wget https://apache.newfountain.nl/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 tar zxf /tmp/apache-maven-3.6.3-bin.tar.gz --directory=/opt
@@ -34,9 +37,6 @@ M2_HOME=/opt/maven
 echo "export M2_HOME=/opt/maven" >> /etc/bashrc
 
 apt-get install -y git
-apt-get install -y java-1.8.0-openjdk-devel
-JAVA_HOME=/usr/lib/jvm/java
-echo "export JAVA_HOME=/usr/lib/jvm/java" >> /etc/bashrc
 
 wget https://download.sonatype.com/nexus/3/nexus-3.30.0-01-unix.tar.gz
 tar zxf nexus-3.30.0-01-unix.tar.gz --directory=/opt
@@ -47,8 +47,8 @@ ln -s /opt/nexus-3.30.0-01 /opt/nexus
 groupadd tomcat
 useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat
 wget https://mirror.novg.net/apache/tomcat/tomcat-9/v9.0.44/bin/apache-tomcat-9.0.44.tar.gz -P /tmp
-tar zxf /tmp/apache-tomcat-9*-src.tar.gz --directory=/opt/tomcat
-ln -s /opt/apache-tomcat-9.0.44-src /opt/tomcat/latest
+tar zxf /tmp/apache-tomcat-9.0.44.tar.gz --directory=/opt
+ln -s /opt/apache-tomcat-9.0.44 /opt/tomcat/latest
 chown -RH tomcat: /opt/tomcat/latest
 sed -i 's/8080/8090/g' /opt/tomcat/latest/conf/server.xml
 chmod +x /opt/tomcat/latest/bin/*.sh
