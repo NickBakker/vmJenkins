@@ -21,16 +21,20 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-wget https://apache.newfountain.nl/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-tar zxf apache-maven-3.6.3-bin.tar.gz --directory=/opt
+apt-get update
+
+#apt-get install -y default-jdk
+#JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+
+wget https://apache.newfountain.nl/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
+tar zxf /tmp/apache-maven-3.6.3-bin.tar.gz --directory=/opt
 ln -s /opt/apache-maven-3.6.3 /opt/maven
 ln -s /opt/maven/bin/mvn /usr/bin/mvn
 M2_HOME=/opt/maven
 echo "export M2_HOME=/opt/maven" >> /etc/bashrc
-rm apache-maven-3.6.3-bin.tar.gz
 
-yum -y install git
-yum -y install java-1.8.0-openjdk-devel
+apt-get install -y git
+apt-get install -y java-1.8.0-openjdk-devel
 JAVA_HOME=/usr/lib/jvm/java
 echo "export JAVA_HOME=/usr/lib/jvm/java" >> /etc/bashrc
 
@@ -41,20 +45,21 @@ ln -s /opt/nexus-3.30.0-01 /opt/nexus
 /opt/nexus/bin/nexus start
 
 groupadd tomcat
-wget https://mirror.novg.net/apache/tomcat/tomcat-9/v9.0.44/src/apache-tomcat-9.0.44-src.tar.gz
-tar zxf apache-tomcat-9.0.44-src.tar.gz --directory=/opt
-rm apache-tomcat-9.0.44-src.tar.gz
-ln -s /opt/apache-tomcat-9.0.44-src /opt/tomcat
-sed -i 's/8080/8090/g' /opt/tomcat/conf/server.xml
-chmod +x /opt/tomcat/bin/*.sh
+useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat
+wget https://mirror.novg.net/apache/tomcat/tomcat-9/v9.0.44/bin/apache-tomcat-9.0.44.tar.gz -P /tmp
+tar zxf /tmp/apache-tomcat-9*-src.tar.gz --directory=/opt/tomcat
+ln -s /opt/apache-tomcat-9.0.44-src /opt/tomcat/latest
+chown -RH tomcat: /opt/tomcat/latest
+sed -i 's/8080/8090/g' /opt/tomcat/latest/conf/server.xml
+chmod +x /opt/tomcat/latest/bin/*.sh
 /opt/tomcat/bin/startup.sh
 
-wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-yum upgrade -y
-yum install -y jenkins 
-systemctl daemon-reload
-systemctl start jenkins
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+add-apt-repository universe
+apt-get update
+apt-get install jenkins -y
+cat /var/lib/jenkins/secrets/initialAdminPassword
 
 echo
 echo "**********************************************************************"
@@ -64,11 +69,13 @@ echo "*                                                                    *"
 echo "**********************************************************************"
 echo
 
-firewall-cmd --zone=public --add-port=8080/tcp --permanent
-firewall-cmd --zone=public --add-port=8081/tcp --permanent
-firewall-cmd --zone=public --add-port=8090/tcp --permanent
-firewall-cmd --zone=public --add-service=http --permanent
-firewall-cmd --reload
+ufw enable
+ufw default allow outgoing
+ufw default allow incoming
+ufw allow 80
+ufw allow 8080
+ufw allow 8090
+ufw allow 8081
 
 echo
 echo "**********************************************************************"
@@ -78,10 +85,7 @@ echo "*                                                                    *"
 echo "**********************************************************************"
 echo
 
-
-ifconfig
-
-
+ip addr show
 
 echo
 echo "**********************************************************************"
@@ -96,9 +100,8 @@ echo "* JENKINS_HOME = /var/lib/jenkins                                    *"
 echo "* MAVEN_HOME = /opt/maven                                            *"
 echo "* JAVA_HOME = /usr/lib/jvm/java                                      *"
 echo "*                                                                    *"
-echo "* start Tomcat  = /opt/tomcat/bin/startup.sh                         *"
+echo "* start Tomcat  = /opt/tomcat/latest/bin/startup.sh                  *"
 echo "* start Nexus   = /opt/nexus/bin/nexus start                         *"
-echo "* start Jenkins = systemctl start jenkins                            *"
 echo "*                                                                    *"
 echo "* Tomcat  port: 8090                                                 *"
 echo "* Jenkins port: 8080                                                 *"
